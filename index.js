@@ -11,6 +11,7 @@ import userRoutes from "./routes/userRoutes.js";
 //utils
 import connectDB from "./config/db.js";
 import { log } from "console";
+import categoryRoutes from "./routes/categoryRoutes.js";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+app.use("/api/category", categoryRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
