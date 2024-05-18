@@ -32,7 +32,15 @@ const addProduct = asyncHandler(async (req, res) => {
 
 const updateProduct = asyncHandler(async (req, res) => {
   try {
-    const { name, description, price, category, quantity, brand } = req.fields;
+    const {
+      name,
+      description,
+      price,
+      category,
+      quantity,
+      brand,
+      countInStock,
+    } = req.fields;
 
     switch (true) {
       case !name:
@@ -43,8 +51,6 @@ const updateProduct = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "Price is required" });
       case !category:
         return res.status(400).json({ message: "Category is required" });
-      case !quantity:
-        return res.status(400).json({ message: "Quantity is required" });
       case !brand:
         return res.status(400).json({ message: "Brand is required" });
     }
@@ -155,7 +161,7 @@ const addProductReview = asyncHandler(async (req, res) => {
 
 const fetchTopProducts = asyncHandler(async (req, res) => {
   try {
-    const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+    const products = await Product.find({}).sort({ rating: -1 }).limit(4);
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -165,6 +171,28 @@ const fetchTopProducts = asyncHandler(async (req, res) => {
 const fetchNewProducts = asyncHandler(async (req, res) => {
   try {
     const products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+const filterProducts = asyncHandler(async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+    let args = {};
+    if (checked.length > 0) {
+      args.category = checked;
+    }
+    if (radio.length > 0) {
+      args.price = {
+        $gte: radio[0],
+        $lte: radio[1],
+      };
+    }
+    const products = await Product.find({
+      ...args,
+    });
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -181,4 +209,5 @@ export {
   addProductReview,
   fetchTopProducts,
   fetchNewProducts,
+  filterProducts,
 };
