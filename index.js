@@ -3,7 +3,7 @@ import path from "path";
 import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-const cors = require("cors");
+import cors from "cors";
 import mongoose from "mongoose";
 
 //routes
