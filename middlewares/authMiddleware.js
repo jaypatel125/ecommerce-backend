@@ -5,10 +5,10 @@ import asyncHandler from "./asyncHandler.js";
 const authenticate = asyncHandler(async (req, res, next) => {
   let token;
   // read jwt from cookie
+
   if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-
   if (!token) {
     res.status(401);
     throw new Error("Not authorized, no token");
