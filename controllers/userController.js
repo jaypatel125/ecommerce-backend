@@ -70,7 +70,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
     // createToken(res, user._id);
 
-    const token = generateToken(newUser._id);
+    const token = generateToken(user._id);
     res.status(200).json({
       _id: user._id,
       username: user.username,
