@@ -29,18 +29,26 @@ const createUser = asyncHandler(async (req, res) => {
 
   try {
     await newUser.save();
-    createToken(res, newUser._id);
+    // createToken(res, newUser._id);
+    const token = generateToken(newUser._id);
     res.status(201).json({
       _id: newUser._id,
       username: newUser.username,
       email: newUser.email,
       isAdmin: newUser.isAdmin,
+      token,
     });
   } catch (error) {
     res.status(400);
     throw new Error("Invalid user data");
   }
 });
+
+const generateToken = (userId) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -60,12 +68,15 @@ const loginUser = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("Invalid credentials");
     }
-    createToken(res, user._id);
+    // createToken(res, user._id);
+
+    const token = generateToken(newUser._id);
     res.status(200).json({
       _id: user._id,
       username: user.username,
       email: user.email,
       isAdmin: user.isAdmin,
+      token,
     });
   }
 });
