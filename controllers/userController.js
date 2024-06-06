@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
-import createToken from "../utils/createToken.js";
+import { createToken } from "../utils/createToken.js";
 import jwt from "jsonwebtoken";
 
 const createUser = asyncHandler(async (req, res) => {
@@ -30,7 +30,7 @@ const createUser = asyncHandler(async (req, res) => {
 
   try {
     await newUser.save();
-    // createToken(res, newUser._id);
+    createToken(res, newUser._id);
     const token = generateToken(newUser._id);
     res.status(201).json({
       _id: newUser._id,
@@ -69,8 +69,7 @@ const loginUser = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("Invalid credentials");
     }
-    // createToken(res, user._id);
-
+    createToken(res, user._id);
     const token = generateToken(user._id);
     res.status(200).json({
       _id: user._id,
