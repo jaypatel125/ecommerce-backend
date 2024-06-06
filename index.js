@@ -27,7 +27,13 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://shopnest-mernstack.vercel.app",
+    // origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Express server is running");
